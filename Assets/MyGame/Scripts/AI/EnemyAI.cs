@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.UIElements;
-
 [AddComponentMenu("DangSon/EnemyAI")]
 public class EnemyAI : MonoBehaviour
 {
@@ -26,7 +25,8 @@ public class EnemyAI : MonoBehaviour
     private Transform target;
     private Animator anim;
     private GameObject player;
-   private  bool isChasing=false;
+    private bool isChasing = false;
+    private Enemy enemy;
     #endregion
     // Start is called before the first frame update
     void Start()
@@ -37,12 +37,23 @@ public class EnemyAI : MonoBehaviour
         target = pointB;
         idleTime = baseIdleTime;
         player = GameObject.FindGameObjectWithTag("Player");
+        enemy = GetComponent<Enemy>();
     }
     // Update is called once per frame
     void Update()
     {
+        if(enemy.isDead) return;
+        if(player != null)
+        {
+            Movement();
+        }
+       
+    }
+    void Movement()
+    {
+       
         float distancePlayer = Vector2.Distance(transform.position, player.transform.position);
-        if(distancePlayer < chaseRange) 
+        if (player!=null&& distancePlayer < chaseRange)
         {
             isChasing = true;
         }
@@ -50,7 +61,7 @@ public class EnemyAI : MonoBehaviour
         {
             isChasing = false;
         }
-        if(isChasing)
+        if (isChasing)
         {
             Chasing();
         }
@@ -83,9 +94,9 @@ public class EnemyAI : MonoBehaviour
     private void Chasing()
     {
         Vector2 direction = (player.transform.position - transform.position).normalized;
-        rb.velocity = direction* speedChasing;
+        rb.velocity = direction * speedChasing;
         anim.SetBool(isIdleAnimtionId, false);
-       
+
     }
     private void Partrol()
     {

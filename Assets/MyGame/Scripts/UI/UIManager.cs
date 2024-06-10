@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         GameManager.Instance.coinEventUpdate.AddListener(AddUiCoin);
+        textCoin.text = DataManager.DataCoin.ToString();
     }
 
     private void AddUiCoin(int coin)
